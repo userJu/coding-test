@@ -7,8 +7,8 @@ for i in range(len(metal)):
         stack.append(metal[i])
     else:
         stack.pop()
-        if i > 0 and metal[i-1] == ")":
+        if metal[i-1] == ")":
             cnt+=1
-        elif i > 0 and metal[i-1] == "(":
+        else:
             cnt+=len(stack)
 print(cnt)
