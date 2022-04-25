@@ -1,21 +1,17 @@
-import sys
-
-input = sys.stdin.readline
-arr=[]
-
-for _ in range(9):
+arr = []
+for i in range(9):
     arr.append(int(input()))
 sums = sum(arr)
-one = 0
-two = 0  
-for j in range(8):
-    for k in range(j+1,9):
-        if sums-(arr[k]+arr[j]) == 100:
-            one,two = arr[j], arr[k]
-            break
 
-arr.remove(one)
-arr.remove(two)
-arr.sort()
-for x in arr:
+def F():
+    for i in range(8):
+        for j in range(i+1,9):
+            if sums - (arr[i]+arr[j]) == 100:
+                return [arr[i],arr[j]]
+
+
+res = set(arr)-set(F())
+res = sorted(list(res))
+for x in res:
     print(x)
+
