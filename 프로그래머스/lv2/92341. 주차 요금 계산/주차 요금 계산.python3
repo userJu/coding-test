@@ -1,0 +1,62 @@
+import math
+def makeDict(records):
+        
+    car_number_arr = []
+    dictionary = {}
+    for x in records:
+        time, number, inout = x.split()
+        car_number_arr.append(number)
+        t = time.split(':')
+        intTime = 0
+        for i in range(2):
+            if i== 0:
+                intTime+=int(t[i])*60
+            elif i == 1:
+                intTime+=int(t[i])
+    
+        if inout == 'IN':
+            if number not in dictionary :
+                dictionary[number] = [intTime]
+            else:
+                dictionary[number].append(intTime)
+        elif inout == 'OUT':
+            if number in dictionary:
+                dictionary[number].append(intTime)
+                
+    return dictionary, car_number_arr
+
+
+
+def calcTime(fees,resTime):
+    bT,bM,dT,dM = fees
+    money = 0
+    if resTime <=bT:
+        money +=bM
+    elif resTime >bT:
+        money+=bM
+        if (resTime-bT)%dT ==0:
+            money+=((resTime-bT)/dT)*dM
+        else:
+            money+=(((resTime-bT)//dT)+1)*dM
+    return money
+
+def solution(fees, records):
+
+    dictionary, car_num_arr = makeDict(records)
+    lastTime = (23*60)+59
+    car_num_arr = sorted(list(set(car_num_arr)))
+    resArr = []
+    for x in car_num_arr:
+        resTime = 0 
+        
+        if len(dictionary[x]) % 2 == 0 :  # 나가고 들어오고 제대로
+            for i in range(1,len(dictionary[x]),2):
+                resTime += (dictionary[x][i]-dictionary[x][i-1])
+        elif len(dictionary[x]) %2 != 0 :  # 나가지 않음
+            dictionary[x].append(lastTime)
+            for i in range(1,len(dictionary[x]),2):
+                resTime += (dictionary[x][i]-dictionary[x][i-1])
+        
+        resArr.append(calcTime(fees,resTime))
+
+    return resArr
