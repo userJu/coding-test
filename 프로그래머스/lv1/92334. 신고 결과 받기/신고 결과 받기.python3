@@ -1,0 +1,31 @@
+def solution(id_list, report, k):
+# ID 정보가 담긴 문자열 배열 report, 정지 기준이 되는 신고 횟수 k
+# 각 유저별로 처리 결과 메일을 받은 횟수를 배열에 담아 return
+    report = set(report)
+    dic = dict()
+    reported = dict()
+    res = []
+    
+    for x in report:
+        sx = x.split(" ")
+        if sx[0] in dic:
+            dic[sx[0]].append(sx[1])
+        else:
+            dic[sx[0]] =[sx[1]]
+        
+        if sx[1] in reported:
+            reported[sx[1]].append(sx[0])
+        else:
+            reported[sx[1]] = [sx[0]]
+        
+    for x in id_list:
+        cnt = 0
+        if x not in dic:
+            res.append(0)
+            continue
+        for y in dic[x]:
+            if len(set(reported[y])) >= k:
+                cnt+=1
+        res.append(cnt)
+        
+    return res
