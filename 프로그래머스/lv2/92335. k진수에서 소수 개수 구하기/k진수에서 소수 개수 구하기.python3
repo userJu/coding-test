@@ -1,0 +1,28 @@
+def change(n,k):
+    changed = ""
+    while n >0:
+        changed+=str(n%k)
+        n = n//k
+    return changed[::-1]
+
+def isprime(x):
+    for i in range(2,int(x**(1/2))+1):
+        if x%i == 0:
+            return False
+    return True
+   
+
+def solution(n, k):
+    changed = change(n,k)
+    resarr = []
+    for x in changed.split('0'):
+        if x != "" and x != "1":
+            resarr.append(int(x))
+    cnt = 0
+
+    for x in resarr:
+        if isprime(x):
+            cnt+=1
+
+    
+    return cnt
