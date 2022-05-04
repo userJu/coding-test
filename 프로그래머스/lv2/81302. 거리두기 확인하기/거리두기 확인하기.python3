@@ -1,0 +1,46 @@
+from collections import deque
+
+dx=[-1,0,1,0]
+dy=[0,-1,0,1]
+
+def BFS(a,b,arr):
+    dq = deque()
+    dq.append((a,b))
+    ch_part = [[0]*5 for _ in range(5)]
+    ch_part[a][b] = 1
+    
+    while dq:
+        p = dq.popleft()
+        
+        for i in range(4):
+            x = p[0]+dx[i]
+            y = p[1]+dy[i]
+            
+            if 0<=x<5 and 0<=y<5 and ch_part[x][y] ==0 :
+                if arr[x][y] == 'O':
+                    ch_part[x][y] = ch_part[p[0]][p[1]]+1
+                    dq.append((x,y))
+                elif arr[x][y] == "P": # p를 만났을 때 거리두기를 체크
+                    ch_part[x][y] = ch_part[p[0]][p[1]]+1 #
+                    if ch_part[x][y]-1<=2:
+                        return False
+    return True
+                    
+
+def room(rooms):
+    for j in range(5): # 방 하나
+        for k in range(5):
+            if rooms[j][k] == "P":
+                if BFS(j,k,rooms) == False :
+                    return 0
+        
+    return 1
+    
+
+def solution(places):
+    res = []
+    for x in places: # 전체 방 5개
+        res.append(room(x))
+        
+    return res
+
