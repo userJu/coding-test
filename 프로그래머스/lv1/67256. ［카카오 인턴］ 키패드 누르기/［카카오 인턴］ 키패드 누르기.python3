@@ -1,0 +1,49 @@
+  
+                
+board = [[1,2,3],[4,5,6],[7,8,9],["*",0,"#"]] # 4* 3 board
+            
+
+def solution(numbers, hand): # 누를 번호, # 왼손 / 오른손잡이
+    left_h = [1,4,7,"*"]
+    right_h = [3,6,9,"#"]
+    which_h = [2,5,8,0]
+    res=""
+    l_now = [3,0]
+    r_now = [3,2]
+    for x in numbers:
+        if x in left_h:
+            res+="L"
+            for i in range(4):
+                if left_h[i] == x:
+                    l_now = [i,0]
+        if x in right_h:
+            res+="R"
+            for j in range(4):
+                if right_h[j] == x:
+                    r_now = [j,2]
+        if x in which_h:
+            for k in range(4):
+                if which_h[k] == x:
+                    # print(x, which_h[k])
+                    l_dist = abs(l_now[0]-k)+abs(l_now[1]-1)
+                    r_dist = abs(r_now[0]-k)+abs(r_now[1]-1)
+                    print(l_dist, r_dist,x)
+                    if l_dist < r_dist:
+                        res+="L"
+                        l_now=[k,1]
+                    elif l_dist> r_dist:
+                        res+="R"
+                        r_now=[k,1]
+                    elif l_dist == r_dist:
+                        if hand == 'right':
+                            res+="R"
+                            r_now=[k,1]
+                        else:
+                            res+="L"
+                            l_now=[k,1]
+            
+    
+    
+    
+    return res
+#  각 번호를 누른 엄지손가락이 왼손인 지 오른손인 지를 나타내는 연속된 문자열 형태
