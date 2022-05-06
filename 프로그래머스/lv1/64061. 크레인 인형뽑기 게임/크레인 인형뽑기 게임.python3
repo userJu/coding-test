@@ -1,0 +1,27 @@
+def solution(board, moves): # 격자의 상태, # 크레인 작동 위치
+    new_board = [[] for _ in range(len(board))]
+    stack = []
+    res = 0
+    for i in range(len(board)):
+        for j in range(len(board)):
+            new_board[i].append(board[j][i])
+    for x in moves: 
+        for i in range(len(board)):
+            doll = new_board[x-1][i]
+            if doll != 0:
+                if stack == []:
+                    stack.append(doll)
+                    new_board[x-1][i] = 0
+                    break
+                else:
+                    if stack[-1] == doll:
+                        stack.pop() # 맨 뒤 스택이 같으면 pop시키고 2개를 추가한다
+                        res+=2
+                        new_board[x-1][i] = 0
+                    else:
+                        stack.append(doll) # 맨 뒤 스택이 다르면 추가한다
+                        new_board[x-1][i] = 0
+                    break
+                    
+    
+    return res
