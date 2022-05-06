@@ -1,42 +1,44 @@
-import heapq
-def cmder(leftdq,rightdq,arr, cmd):
-    deleted = []
-    for x in cmd:
-        if x[0] == 'U':
-            num = int(x[2:])
-            for _ in range(num):
-                heapq.heappush(rightdq, -heapq.heappop(leftdq))
-        elif x[0] == 'D':
-            num = int(x[2:])
-            for _ in range(num):
-                heapq.heappush(leftdq, -heapq.heappop(rightdq))
-        elif x[0] == 'C':
-            arr[-leftdq[0]] = 'X'
-            deleted.append(-heapq.heappop(leftdq))
-            if len(rightdq)>0:
-                heapq.heappush(leftdq, -heapq.heappop(rightdq))
-        elif x[0] == 'Z':
-            arr[deleted[-1]] = 'O'
-            if deleted[-1] < -leftdq[0]:
-                heapq.heappush(leftdq,-deleted.pop())
-            else:
-                heapq.heappush(rightdq, deleted.pop())
-            
-            
-        
-
-
-
 def solution(n, k, cmd):
-    leftdq = []
-    rightdq = []
-    arr = ['O' for _ in range(n)]
-    for i in range(k+1):
-        heapq.heappush(leftdq,-i)
-    for j in range(k+1,n):
-        heapq.heappush(rightdq,j)
+    cur = k
+    table = {i:[i-1,i+1] for i in range(n)}
+    answer = ['O']*n
+    table[0] = [None,1] # head는 위로 갈 곳이 없고 밑으로는 1간다
+    table[n-1] = [n-2, None] # tail은 위로 갈 곳이 n-2가 있고, 밑으로는 None
+    stack = [] # 뺀걸 저장해두는 곳
     
-    cmder(leftdq,rightdq,arr, cmd)
-    
-        
-    return "".join(arr)
+    for x in cmd:
+        if x == 'C':
+            answer[cur] = 'X'
+            prev,next = table[cur] # 빠진걸 table이라는 dict에 알려준다
+            stack.append([prev,cur,next])
+            if next == None:
+                cur = table[cur][0]
+            else:
+                cur = table[cur][1]
+            if prev == None:
+                table[next][0] = None
+            elif next == None:
+                table[prev][1] = None
+            else:
+                table[prev][1] = next
+                table[next][0] = prev
+        elif x == "Z":
+            prev,now,next = stack.pop()
+            answer[now] = 'O'
+            if prev == None:
+                table[next][0] = now
+            elif next == None:
+                table[prev][1] = now
+            else:
+                table[next][0] = now
+                table[prev][1] = now
+        else:
+            c1,c2 = x.split(' ')
+            c2 = int(c2)
+            if c1 == 'D':
+                for _ in range(c2):
+                    cur = table[cur][1]
+            else:
+                for _ in range(c2):
+                    cur = table[cur][0]
+    return "".join(answer)
