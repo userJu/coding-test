@@ -1,0 +1,23 @@
+import heapq
+
+def solution(s):
+    dict = {}
+    resArr = set()
+    num = ''
+    for x in s[1:len(s)-1]:
+        if x.isalnum():
+            num+=x
+        else:
+            if num !='':
+                resArr.add(num)
+                dict[num] = dict.get(num,0)+1
+                num = ''
+    hq = []
+    for x in resArr:
+        heapq.heappush(hq,(-dict[x],x))
+        
+    resArr = []
+    while hq:
+        resArr.append(int(heapq.heappop(hq)[1]))
+        
+    return resArr
