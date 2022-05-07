@@ -1,0 +1,20 @@
+from itertools import permutations
+
+def solution(expression):
+    permute = list(permutations(['+','-','*'],3))
+    answer = 0
+    for x in permute:
+        new = []
+        first = expression.split(x[0])
+        for section in first:
+            second = section.split(x[1])
+            second = [str(eval(x)) for x in second]
+            new.append(x[1].join(second))
+        new = [str(eval(x)) for x in new]
+        result = abs(eval(x[0].join(new)))
+        
+        
+        if result > answer:
+            answer = result
+            
+    return answer
