@@ -1,39 +1,41 @@
 import sys
 from collections import deque
 input = sys.stdin.readline
-
 N,M,V = map(int,input().split())
-board = [[0]*(N+1) for _ in range(N+1)]
+
+graph = [[] for _ in range(N+1)]
+
 for _ in range(M):
     a,b = map(int,input().split())
-    board[a][b] = board[b][a] = 1
+    graph[a].append(b)
+    graph[b].append(a)
 
-def DFS(L,discovered = []):
-    discovered.append(L)
-    print(L, end=" ")
-
-    if len(discovered) == N:
-        return
-    else:
-        for i in range(len(board[L])):
-            if board[L][i] == 1 and i not in discovered:
-                DFS(i, discovered)
-           
-                
+for i in range(N+1):
+    graph[i].sort()
     
+    
+def DFS(v, visited = []):
+    visited.append(v)
+    print(v, end=" ")
+    for i in graph[v]:
+        if i not in visited:
+            DFS(i,visited)
 
-def BFS(L):
-    discovered = [L]
+    
+def BFS(v):
     dq = deque()
-    dq.append(L)
+    dq.append(v)
+    visited = []
+    visited.append(v)
     while dq:
         p = dq.popleft()
-        print(p, end=" ")
-        for i in range(len(board[L])):
-            if board[p][i] == 1 and i not in discovered :
-                discovered.append(i)
-                dq.append(i)
-
-DFS(V) 
+        for x in graph[p]:
+            if x not in visited:
+                dq.append(x)
+                visited.append(x)
+    print(*visited)
+    
+DFS(V)
 print()
 BFS(V)
+    
