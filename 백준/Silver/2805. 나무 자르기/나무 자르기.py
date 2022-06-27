@@ -15,7 +15,7 @@ import sys
 input = sys.stdin.readline
 N,M = map(int,input().split())
 arr = list(map(int,input().split()))
-min_tree=1
+min_tree=0
 max_tree = max(arr)
 
 while min_tree<=max_tree:
