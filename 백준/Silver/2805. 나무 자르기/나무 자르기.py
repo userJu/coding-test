@@ -16,11 +16,7 @@ input = sys.stdin.readline
 N,M = map(int,input().split())
 arr = list(map(int,input().split()))
 min_tree=1
-max_tree = -1
-for x in arr:
-    min_tree = min(x,min_tree)
-    max_tree = max(x,max_tree)
-
+max_tree = max(arr)
 
 while min_tree<=max_tree:
     mid = (min_tree+max_tree)//2
