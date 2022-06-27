@@ -8,7 +8,7 @@ ch_board = [[-1]*N for _ in range(M)]
 dx = [1,0,0,-1]
 dy = [0,1,-1,0]
 
-def DFS(x,y):
+def DFS(x,y,H):
     if x == M-1 and y == N-1:
         return 1
     if ch_board[x][y] !=-1:
@@ -17,9 +17,9 @@ def DFS(x,y):
     for i in range(4):
         nx = x + dx[i]
         ny = y + dy[i]
-        if 0<=nx<M and 0<=ny<N and board[nx][ny]< board[x][y]:
-            ch_board[x][y] += DFS(nx,ny)
+        if 0<=nx<M and 0<=ny<N and board[nx][ny]<H:
+            ch_board[x][y] += DFS(nx,ny,board[nx][ny])
     return ch_board[x][y]
                 
 
-print(DFS(0,0))
+print(DFS(0,0,board[0][0]))
