@@ -1,10 +1,10 @@
-# [Silver III] 에디터 - 1406 
+# [Silver II] 에디터 - 1406 
 
 [문제 링크](https://www.acmicpc.net/problem/1406) 
 
 ### 성능 요약
 
-메모리: 37180 KB, 시간: 368 ms
+메모리: 40232 KB, 시간: 364 ms
 
 ### 분류
 
