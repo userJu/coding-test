@@ -4,33 +4,26 @@ input = sys.stdin.readline
 
 N,M = map(int,input().split())
 board = [list(map(int,input().rstrip())) for _ in range(N)]
-board_cnt =  [[0]*M for _ in range(N)]
+ch_board = [[0]*M for _ in range(N)]
 
 dx = [-1,0,1,0]
 dy = [0,1,0,-1]
 
-# 최소의 칸 => BFS
-def BFS(a,b):
-    dq = deque()
-    dq.append((a,b))
-    board[a][b] = 0
-    board_cnt[a][b] = 1
-    
+def BFS(x,y):
+    dq = deque([])
+    dq.append((x,y))
+    ch_board[x][y] = 1
     while dq:
-        p = dq.popleft()
-        
-        if p[0] == N-1 and p[1] ==M-1:
-            return board_cnt[p[0]][p[1]]
-
-
+        xx,yy = dq.popleft()
         for i in range(4):
-            x = p[0]+dx[i]
-            y = p[1]+dy[i]
-            if 0<=x<N and 0<=y < M and board[x][y] == 1:
-                board[x][y] = 0
-                board_cnt[x][y] = board_cnt[p[0]][p[1]]+1
-                dq.append((x,y))
+            nx = xx + dx[i]
+            ny = yy + dy[i]
+            if 0<=nx<N and 0<=ny<M and board[nx][ny] == 1 and ch_board[nx][ny] == 0:
+                ch_board[nx][ny] = ch_board[xx][yy]+1
+                dq.append((nx,ny))
+                if nx == N-1 and ny == M-1:
+                    return ch_board[nx][ny]
                 
+            
 print(BFS(0,0))
 
-    
