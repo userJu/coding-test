@@ -1,5 +1,4 @@
 import sys
-import copy
 from collections import deque
 from itertools import combinations
 input = sys.stdin.readline
@@ -21,9 +20,9 @@ def BFS():
         nx = xx+dx[dd]
         ny = yy+dy[dd]
         if 0<=nx<N and 0<=ny<N:
-            if n_board[nx][ny] == 'S':
+            if board[nx][ny] == 'S':
                 return False
-            elif n_board[nx][ny] == 'X':
+            elif board[nx][ny] == 'X':
                 dq.append((nx,ny,dd))
     return True
                 
@@ -36,12 +35,13 @@ for i in range(N):
             teachers.append((i,j))
             
 for comb in combinations(empty,3):
-    n_board = copy.deepcopy(board)
     for x in comb:
-        n_board[x[0]][x[1]] = 'O'
+        board[x[0]][x[1]] = 'O'
     if BFS():
         print('YES')
         break
+    for x in comb:
+        board[x[0]][x[1]] = 'X'
 else:
     print('NO')
         
