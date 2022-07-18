@@ -1,54 +1,55 @@
+"""
+꼭 3개 = 조합?
+세로 가로 작음 => 부르트포스 사용 가능
+단지 개수 구하기
+"""
 import sys
 from collections import deque
+from itertools import combinations
+import copy
+
 input = sys.stdin.readline
 N,M = map(int,input().split())
-cnt = 0
 board = [list(map(int,input().split())) for _ in range(N)]
-
+safe_zone = []
+virus = []
+res = 0
 dx = [-1,0,1,0]
 dy = [0,-1,0,1]
-res = -2147000000
-zero_cnt = 0
-for i in range(N):
-    for j in range(M):
-        if board[i][j] == 0:
-            zero_cnt+=1
 
 def BFS():
     global res
-    dq = deque([])
-    ch_board = [[0]*M for _ in range(N)]
-    res_cnt = 0
-    for i in range(N):
-        for j in range(M):
-            if board[i][j] == 2:
-                dq.append((i,j))
-                ch_board[i][j] = 1
-                
-    while dq:
-        xx,yy = dq.popleft()
+    cnt = len(safe_zone)-3
+    ch_virus = deque([])
+    for x,y in virus:
+        ch_virus.append((x,y))
+    while ch_virus:
+        xx,yy = ch_virus.popleft()
         for i in range(4):
-            nx = xx+dx[i]
-            ny = yy+dy[i]
-            if 0<=nx<N and 0<=ny<M and ch_board[nx][ny] == 0 and board[nx][ny] == 0:
+            nx = xx + dx[i]
+            ny = yy + dy[i]
+            if 0<=nx<N and 0<=ny<M and ch_board[nx][ny] == 0:
                 ch_board[nx][ny] = 2
-                res_cnt+=1
-                dq.append((nx,ny))
-    res = max(zero_cnt-res_cnt,res)
+                ch_virus.append((nx,ny))
+                cnt-=1
+    res = max(res,cnt)
+    
 
+for i in range(N):
+    for j in range(M):
+        if board[i][j] == 0:
+            safe_zone.append((i,j))
+        elif board[i][j] == 2:
+            virus.append((i,j))
             
+for comb in combinations(safe_zone,3):
+    ch_board = copy.deepcopy(board)
+    for x,y in comb:
+        ch_board[x][y] = 1
+    BFS()
+print(res)
+        
+        
 
-def DFS(cnt):
-    if cnt == 3:
-        BFS()
-        return
-    for i in range(N):
-        for j in range(M):
-            if board[i][j] == 0:
-                board[i][j] = 1
-                DFS(cnt+1)
-                board[i][j] = 0
 
-DFS(0)
-print(res-3)
-                
+
